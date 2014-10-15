@@ -46,7 +46,7 @@ fi
 echo -n 'Checking libc version... '
 gcc -Wall -o libctest libctest.c
 VERSION=`ldd libctest | grep libc\\.so | awk '{print $1}'`
-rm libctest
+#rm libctest
 echo $VERSION
 echo "#define LIBC_VERSION \"$VERSION\"" >> $OUTFILE
 if test "$VERSION" = 'libc.so.5' ; then
@@ -56,7 +56,7 @@ fi
 
 if test "$VERSION" = 'libc.so.6' ; then
 	echo -n 'Checking glibc subversion... '
-	tmp="`ldd /bin/sh | grep libc.so 2> /dev/null`"
+	tmp="`ldd libctest | grep libc.so 2> /dev/null`"
 	LibcPath=`expr "$tmp" : '[^/]*\(/[^ ]*\)'`
 	tmp="`strings $LibcPath | grep -i 'c library'`"
 	OsLibcMajor=`expr "$tmp" : '.* \([0-9][0-9]*\)'`
@@ -108,6 +108,9 @@ if test "$VERSION" = 'libc.so.6' ; then
 		13)
 			echo '#define GLIBC_MINOR 13' >> $OUTFILE
 			SUBVERSION='glibc-2.13' ;;
+		14|15|16|17|18)
+			echo '#define GLIBC_MINOR 13' >> $OUTFILE
+			SUBVERSION='glibc-2.13' ;;
 		*)
 			echo 'Treated as glibc >= 2.1 (finger crossed)'
 			echo '#define GLIBC_MINOR 1' >> $OUTFILE
@@ -117,6 +120,7 @@ if test "$VERSION" = 'libc.so.6' ; then
 	esac
 fi
 
+rm libctest
 echo >> $OUTFILE
 echo '#endif' >> $OUTFILE
 
