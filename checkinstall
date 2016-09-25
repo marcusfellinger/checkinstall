@@ -2286,7 +2286,7 @@ if ! [ $FAILED -gt 0 ]; then
 
 # Identify the rpm version
 
-RPM_VERSION=`rpm --version | awk '{ print $3 }'`
+RPM_VERSION=`rpm --version | awk '{ print $2 }'`
 RPM_MAJOR_VERSION=`echo $RPM_VERSION | cut -f1 -d"."`
 RPM_MINOR_VERSION=`echo $RPM_VERSION | cut -f2 -d"."`
 RPM_PATCH_LEVEL=`echo $RPM_VERSION | cut -f3 -d"."`
